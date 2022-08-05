@@ -5,6 +5,7 @@ import com.fullcycle.admin.catalogo.domain.category.Category;
 import com.fullcycle.admin.catalogo.domain.category.CategoryGateway;
 import com.fullcycle.admin.catalogo.domain.category.CategoryID;
 import com.fullcycle.admin.catalogo.domain.exceptions.DomainException;
+import com.fullcycle.admin.catalogo.domain.exceptions.NotFoundException;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryJpaEntity;
 import com.fullcycle.admin.catalogo.infrastructure.category.persistence.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -47,19 +52,18 @@ public class GetCategoryByIdUseCaseIT {
         Assertions.assertEquals(expectedName, actualCategory.name());
         Assertions.assertEquals(expectedDescription, actualCategory.description());
         Assertions.assertEquals(expectedIsActive, actualCategory.isActive());
-//        Assertions.assertEquals(aCategory.getCreatedAt(), actualCategory.createdAt());
-//        Assertions.assertEquals(aCategory.getUpdatedAt(), actualCategory.updatedAt());
+        Assertions.assertEquals(aCategory.getCreatedAt(), actualCategory.createdAt());
+        Assertions.assertEquals(aCategory.getUpdatedAt(), actualCategory.updatedAt());
         Assertions.assertEquals(aCategory.getDeletedAt(), actualCategory.deletedAt());
-
     }
 
     @Test
     void givenAnInvalidId_whenCallsGetCategory_shouldReturnNotFound() {
-        final var expectedErrorMessage = "Category with ID 123 was not-found";
+        final var expectedErrorMessage = "Category with ID 123 was not found";
         final var expectedId = CategoryID.from("123");
 
         final var actualException = Assertions.assertThrows(
-                DomainException.class,
+                NotFoundException.class,
                 () -> useCase.execute(expectedId.getValue())
         );
 
@@ -89,4 +93,5 @@ public class GetCategoryByIdUseCaseIT {
                         .toList()
         );
     }
+
 }
