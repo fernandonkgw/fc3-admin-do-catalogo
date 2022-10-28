@@ -2,6 +2,7 @@ package com.fullcycle.admin.catalogo;
 
 import com.fullcycle.admin.catalogo.infrastructure.configuration.WebServerConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
